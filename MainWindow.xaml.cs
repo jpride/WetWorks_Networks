@@ -371,12 +371,11 @@ namespace WetWorks_NetWorks
                             {
                                 if (nic.Name.Contains("Wi-Fi"))
                                 {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.Contains("Virtual"))
                                     {
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
                                         _adapter = nic.Name;
-                                        
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -420,12 +419,11 @@ namespace WetWorks_NetWorks
                             {
                                 if (nic.Name.Contains("Ethernet"))
                                 {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.ToLower().Contains("loopback") & !nic.Name.ToLower().Contains("bluetooth") & !nic.Description.ToLower().Contains("virtual"))
                                     {
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
                                         _adapter = nic.Name;
-                                        
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -511,7 +509,7 @@ namespace WetWorks_NetWorks
                             {
                                 if (nic.Name.Contains("Wi-Fi"))
                                 {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
                                     {
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
@@ -560,7 +558,7 @@ namespace WetWorks_NetWorks
                             {
                                 if (nic.Name.Contains("Ethernet"))
                                 {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
                                     {
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
