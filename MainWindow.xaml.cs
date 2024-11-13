@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Reflection;
 
 
+
 namespace WetWorks_NetWorks
 { 
     public partial class MainWindow : Window
@@ -357,13 +358,12 @@ namespace WetWorks_NetWorks
                 //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
                 foreach (NetworkInterface nic in interfaces)
                 {
-
                     IPInterfaceProperties adapterProps = nic.GetIPProperties();
                     IPv4InterfaceProperties ipv4Props = adapterProps.GetIPv4Properties();
 
                     if (nic.OperationalStatus == OperationalStatus.Up & nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                     {
-                        _adapterType = nic.NetworkInterfaceType; 
+                        _adapterType = nic.NetworkInterfaceType;
 
                         if (_adapterType == NetworkInterfaceType.Wireless80211) //selected adapter 
                         {
@@ -371,19 +371,24 @@ namespace WetWorks_NetWorks
                             {
                                 if (nic.Name.Contains("Wi-Fi"))
                                 {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.Contains("Virtual"))
+                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
                                     {
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
                                         _adapter = nic.Name;
 
+                                        IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        string domainName = prop.DnsSuffix;
+                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
 
+                                        //update UI fields
                                         this.Dispatcher.Invoke(() =>
                                         {
                                             adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = String.Format($"{_nic.GetIPProperties().DnsSuffix}");
+                                            domainTxt.Content = domainName;
                                             UpdateStatusLbl(String.Empty);
                                         });
 
@@ -425,13 +430,18 @@ namespace WetWorks_NetWorks
                                         _nic = nic;
                                         _adapter = nic.Name;
 
+                                        IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        string domainName = prop.DnsSuffix;
+                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
 
+                                        //update UI fields
                                         this.Dispatcher.Invoke(() =>
                                         {
                                             adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = String.Format($"{_nic.GetIPProperties().DnsSuffix}");
+                                            domainTxt.Content = domainName;
                                             UpdateStatusLbl(String.Empty);
                                         });
 
@@ -481,6 +491,7 @@ namespace WetWorks_NetWorks
                 _timer.Start();
                 UpdateStatusLbl("Waiting for active adapter");
             }
+            
         }
 
         public void UpdateAdapterInfo()
@@ -502,7 +513,6 @@ namespace WetWorks_NetWorks
 
                     if (nic.OperationalStatus == OperationalStatus.Up & nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                     {
-                        
                         if (_adapterType == NetworkInterfaceType.Wireless80211) //selected adapter 
                         {
                             if (nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
@@ -514,15 +524,20 @@ namespace WetWorks_NetWorks
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
                                         _adapter = nic.Name;
-                                        
+                                        Console.WriteLine($"DNS: {_nic.GetIPProperties().DnsSuffix}");
+
+                                        IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        string domainName = prop.DnsSuffix;
+                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
 
+                                        //update UI fields
                                         this.Dispatcher.Invoke(() =>
                                         {
                                             adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = String.Format($"{_nic.GetIPProperties().DnsSuffix}");
+                                            domainTxt.Content = domainName;
                                             UpdateStatusLbl(String.Empty);
                                         });
 
@@ -563,15 +578,19 @@ namespace WetWorks_NetWorks
                                         //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                                         _nic = nic;
                                         _adapter = nic.Name;
-                                        
+
+                                        IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        string domainName = prop.DnsSuffix;
+                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
 
+                                        //update UI fields
                                         this.Dispatcher.Invoke(() =>
                                         {
                                             adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = String.Format($"{_nic.GetIPProperties().DnsSuffix}");
+                                            domainTxt.Content = domainName;
                                             UpdateStatusLbl(String.Empty);
                                         });
 
