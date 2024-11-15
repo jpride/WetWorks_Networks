@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Reflection;
+using System.Threading;
 
 
 
@@ -22,6 +23,9 @@ namespace WetWorks_NetWorks
         public int selectChoiceInt = 0;
 
         private static System.Windows.Forms.Timer _timer;
+
+        private static System.Timers.Timer _networkChangeDebounceTimer;
+        private static readonly int _networkChangeDebounceTimerInterval = 10000;
 
         private NetworkInterface _nic;
         private string _adapter;
@@ -250,38 +254,57 @@ namespace WetWorks_NetWorks
         private void AddressChangedCallback(object sender, EventArgs e)
         {
             Console.WriteLine($"AddressChangedCallback Entered");
-            
-            //Refresh apapters and find the one that matches _adapter from UpdateAdapterInfo()
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface n in adapters)
+
+            //Implemented a debounce timer to account for the fact that this event gets called several times for a single network change.
+            // Stop any existing timer
+            _networkChangeDebounceTimer?.Stop();
+
+            // Create a new timer if it doesn't exist
+            if (_networkChangeDebounceTimer == null)
             {
-                if (n.Name == _adapter)
+                _networkChangeDebounceTimer = new System.Timers.Timer { Interval = _networkChangeDebounceTimerInterval };
+                _networkChangeDebounceTimer.AutoReset = false;
+                _networkChangeDebounceTimer.Elapsed += (s, args) =>
                 {
-                    _nic = n;
-                    break;
-                }
+                    _networkChangeDebounceTimer.Stop();               
+                    
+                    //Refresh apapters and find the one that matches _adapter from UpdateAdapterInfo()
+                    NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+                    foreach (NetworkInterface n in adapters)
+                    {
+                        if (n.Name == _adapter)
+                        {
+                            _nic = n;
+                            break;
+                        }
+                    }
+
+                    //commented this line out because it gets overwritten immediately by the UpdateAdapterInfo() call below. 
+                    //UpdateStatusLbl(String.Format($"Address Changed Detected on {_nic.Name}"));
+
+                    //Run UpdateAdapterInfo() if the adapter is Up, if not, place message in label that reports it down
+                    if (_nic.OperationalStatus == OperationalStatus.Up)
+                    {
+                        try
+                        {
+                            UpdateAdapterInfo();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Write("Error in Callback: {0}", ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        UpdateStatusLbl(String.Format($"{_adapter} is down..."));
+                        SetIpaText(String.Empty);
+                        SetSpeed();
+                    }
+                }; 
             }
 
-            UpdateStatusLbl(String.Format($"Address Changed Detected on adapter: {_nic.Name}"));
-
-            //Run UpdateAdapterInfo() if the adapter is Up, if not, place message in label that reports it down
-            if (_nic.OperationalStatus == OperationalStatus.Up)
-            {
-                try
-                {
-                    UpdateAdapterInfo();
-                }
-                catch (Exception ex)
-                {
-                    Console.Write("Error in Callback: {0}", ex.Message);
-                }
-            }
-            else
-            {
-                UpdateStatusLbl(String.Format($"{_adapter} is down..."));
-                SetIpaText(String.Empty);
-                SetSpeed();
-            }
+            // Start the timer
+            _networkChangeDebounceTimer.Start();
         }
 
         private void NetworkAvailabilityChangedCallback(object sender, NetworkAvailabilityEventArgs e)
@@ -303,7 +326,7 @@ namespace WetWorks_NetWorks
                 }
             }
 
-            UpdateStatusLbl(String.Format($"Address Changed Detected on adapter: {_nic.Name}"));
+            UpdateStatusLbl(String.Format($"Address Changed Detected on {_nic.Name}"));
 
             //Run UpdateAdapterInfo() if the adapter is Up, if not, place message in label that reports it down
             if (_nic.OperationalStatus == OperationalStatus.Up)
@@ -651,7 +674,7 @@ namespace WetWorks_NetWorks
                 this.Dispatcher.Invoke(() => 
                 {
                     adapterTxt.Content = String.Format($"{_adapter}");
-                    hostnameTxt.Content = Dns.GetHostName();
+                    hostnameTxt.Content = Dns.GetHostName();             
                     SetIpaText(String.Format($"{ip.Address} / {ip.PrefixLength}"));
                 });
       
@@ -714,7 +737,6 @@ namespace WetWorks_NetWorks
                     statusLbl.Visibility = Visibility.Visible;
                     statusTxt.Content = String.Format($"{msg}");
                 });
-                
             }
             else
             {
@@ -723,8 +745,9 @@ namespace WetWorks_NetWorks
                     statusLbl.Visibility = Visibility.Hidden;
                     statusTxt.Content = String.Empty;
                 });
-
             }
+
+            //Thread.Sleep(750);
         }
 
         private void UdpateInterfaceButton()
@@ -945,7 +968,7 @@ namespace WetWorks_NetWorks
 
             this.Dispatcher.Invoke(() =>
             {
-                Console.WriteLine($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
+                //Console.WriteLine($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
                 speedTxt.Content = String.Format($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
             });
 
