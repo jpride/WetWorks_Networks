@@ -3,10 +3,12 @@ using System.Windows;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Reflection;
 using System.Threading;
+
 
 
 
@@ -337,7 +339,7 @@ namespace WetWorks_NetWorks
                 }
                 catch (Exception ex)
                 {
-                    Console.Write("Error in Callback: {0}", ex.Message);
+                    Console.Write("Error in NetworkAvailabilityChangedCallback: {0}", ex.Message);
                 }
             }
             else
@@ -401,8 +403,9 @@ namespace WetWorks_NetWorks
                                         _adapter = nic.Name;
 
                                         IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        Domain domain = Domain.GetCurrentDomain();
                                         string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -454,8 +457,9 @@ namespace WetWorks_NetWorks
                                         _adapter = nic.Name;
 
                                         IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        Domain domain = Domain.GetCurrentDomain();
                                         string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -550,8 +554,9 @@ namespace WetWorks_NetWorks
                                         Console.WriteLine($"DNS: {_nic.GetIPProperties().DnsSuffix}");
 
                                         IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        Domain domain = Domain.GetCurrentDomain();
                                         string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -603,8 +608,9 @@ namespace WetWorks_NetWorks
                                         _adapter = nic.Name;
 
                                         IPInterfaceProperties prop = _nic.GetIPProperties();
+                                        Domain domain = Domain.GetCurrentDomain();
                                         string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? "Domain Undefined" : domainName;
+                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
 
                                         speed = SpeedCalc(nic);
                                         SetSpeed();
@@ -746,8 +752,6 @@ namespace WetWorks_NetWorks
                     statusTxt.Content = String.Empty;
                 });
             }
-
-            //Thread.Sleep(750);
         }
 
         private void UdpateInterfaceButton()
@@ -958,7 +962,6 @@ namespace WetWorks_NetWorks
             {
                 speedSuffix = "Gbps";
                 div = 1000;
-
             }
             else
             {
@@ -968,7 +971,6 @@ namespace WetWorks_NetWorks
 
             this.Dispatcher.Invoke(() =>
             {
-                //Console.WriteLine($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
                 speedTxt.Content = String.Format($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
             });
 
