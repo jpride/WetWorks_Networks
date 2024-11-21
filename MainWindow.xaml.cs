@@ -69,7 +69,7 @@ namespace WetWorks_NetWorks
 
 
             //Initialize UserIpChoice objects
-            Choice1 = new UserIpChoice(_dhcpChoiceContent,String.Empty, _dhcpNetShChoiceString);
+            Choice1 = new UserIpChoice(_dhcpChoiceContent, String.Empty, _dhcpNetShChoiceString);
             Choice2 = new UserIpChoice(_choice2Content, _choice2Address, _choice2NetShString);
             Choice3 = new UserIpChoice(_choice3Content, _choice3Address, _choice3NetShString);
             Choice4 = new UserIpChoice(_choice4Content, _choice4Address, _choice4NetShString);
