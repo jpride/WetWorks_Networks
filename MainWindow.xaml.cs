@@ -17,21 +17,22 @@ namespace WetWorks_NetWorks
     public partial class MainWindow : Window
     {
         #region ******** Variables ********
+
         public int choiceSelect = 0;
 
-        public bool ethernetSelected = false;
-        public bool wifiSelected = false;
+        public bool isEthernetSelected = false;
+        public bool isWifiSelected = false;
 
         public int selectChoiceInt = 0;
 
-        private static System.Windows.Forms.Timer _timer;
+        private static System.Windows.Forms.Timer _adapterCheckTimer;
 
         private static System.Timers.Timer _networkChangeDebounceTimer;
         private static readonly int _networkChangeDebounceTimerInterval = 10000;
 
         private NetworkInterface _nic;
-        private string _adapter;
-        private long speed;
+        private string _adapterName;
+        private long _speed;
         private int _adapterCount = 0;
         private NetworkInterfaceType _adapterType;
 
@@ -48,6 +49,13 @@ namespace WetWorks_NetWorks
         readonly string _choice2NetShString = "static address=10.10.1.253 mask=255.255.0.0 gateway=10.10.1.1";
         readonly string _choice3NetShString = "static address=192.168.1.253 mask=255.255.255.0 gateway=192.168.1.1";
         readonly string _choice4NetShString = "static address=169.254.1.253 mask=255.255.0.0 gateway=169.254.1.1";
+
+        UserIpChoice Choice1;
+        UserIpChoice Choice2;
+        UserIpChoice Choice3;
+        UserIpChoice Choice4;
+
+
         #endregion 
 
         public MainWindow()
@@ -59,11 +67,19 @@ namespace WetWorks_NetWorks
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(NetworkAvailabilityChangedCallback);
 
-            //Initialize button content
-            choice1Btn.Content = _dhcpChoiceContent;
-            choice2Btn.Content = _choice2Content;
-            choice3Btn.Content = _choice3Content;
-            choice4Btn.Content = _choice4Content;
+
+            //Initialize UserIpChoice objects
+            Choice1 = new UserIpChoice(_dhcpChoiceContent,String.Empty, _dhcpNetShChoiceString);
+            Choice2 = new UserIpChoice(_choice2Content, _choice2Address, _choice2NetShString);
+            Choice3 = new UserIpChoice(_choice3Content, _choice3Address, _choice3NetShString);
+            Choice4 = new UserIpChoice(_choice4Content, _choice4Address, _choice4NetShString);
+
+            //Set Button Content from UserIpChoice objects
+            choice1Btn.Content = Choice1.UiContent;
+            choice2Btn.Content = Choice2.UiContent;
+            choice3Btn.Content = Choice3.UiContent;
+            choice4Btn.Content = Choice4.UiContent;
+
 
             //get assembly version for version label
             Version version = Assembly.GetEntryAssembly().GetName().Version;
@@ -89,16 +105,16 @@ namespace WetWorks_NetWorks
 
                     if (choiceSelect == 1)
                     {
-                        Process p = CreateProcess(_adapter, _dhcpNetShChoiceString);
+                        Process p = CreateProcess(_adapterName, _dhcpNetShChoiceString);
                         ProcessRequest(p);
 
                         UpdateStatusLbl("waiting for DHCP...");
                         SetIpaText(String.Empty);
 
-                        _timer = new System.Windows.Forms.Timer();
-                        _timer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
-                        _timer.Interval = 5000;
-                        _timer.Start();
+                        _adapterCheckTimer = new System.Windows.Forms.Timer();
+                        _adapterCheckTimer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
+                        _adapterCheckTimer.Interval = 5000;
+                        _adapterCheckTimer.Start();
                         UpdateStatusLbl("Waiting for active adapter");
                     }
                     break;
@@ -109,7 +125,7 @@ namespace WetWorks_NetWorks
 
                     if (choiceSelect == 2)
                     {                      
-                        Process p = CreateProcess(_adapter, _choice2NetShString);
+                        Process p = CreateProcess(_adapterName, _choice2NetShString);
                         ProcessRequest(p);
                         UpdateAdapterInfo();
                     }
@@ -121,7 +137,7 @@ namespace WetWorks_NetWorks
 
                     if (choiceSelect == 3)
                     {
-                        Process p = CreateProcess(_adapter, _choice3NetShString);
+                        Process p = CreateProcess(_adapterName, _choice3NetShString);
                         ProcessRequest(p);
                         UpdateAdapterInfo();
                     }
@@ -133,7 +149,7 @@ namespace WetWorks_NetWorks
 
                     if (choiceSelect == 4)
                     {
-                        Process p = CreateProcess(_adapter, _choice4NetShString);
+                        Process p = CreateProcess(_adapterName, _choice4NetShString);
                         ProcessRequest(p);
                         UpdateAdapterInfo();
                     }
@@ -236,7 +252,7 @@ namespace WetWorks_NetWorks
 
         private void EthernetBtn_Click(object sender, RoutedEventArgs e)
         {
-            ethernetSelected = true;
+            isEthernetSelected = true;
             ResetUserEntryText();
             _adapterType = NetworkInterfaceType.Ethernet;
             UpdateAdapterInfo();
@@ -244,7 +260,7 @@ namespace WetWorks_NetWorks
 
         private void WifiBtn_Click(object sender, RoutedEventArgs e)
         {
-            wifiSelected = true;
+            isWifiSelected = true;
             ResetUserEntryText();
             _adapterType = NetworkInterfaceType.Wireless80211;
             UpdateAdapterInfo();
@@ -274,15 +290,12 @@ namespace WetWorks_NetWorks
                     NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
                     foreach (NetworkInterface n in adapters)
                     {
-                        if (n.Name == _adapter)
+                        if (n.Name == _adapterName)
                         {
                             _nic = n;
                             break;
                         }
                     }
-
-                    //commented this line out because it gets overwritten immediately by the UpdateAdapterInfo() call below. 
-                    //UpdateStatusLbl(String.Format($"Address Changed Detected on {_nic.Name}"));
 
                     //Run UpdateAdapterInfo() if the adapter is Up, if not, place message in label that reports it down
                     if (_nic.OperationalStatus == OperationalStatus.Up)
@@ -293,12 +306,12 @@ namespace WetWorks_NetWorks
                         }
                         catch (Exception ex)
                         {
-                            Console.Write("Error in Callback: {0}", ex.Message);
+                            Console.Write("Error in AddressChangedCallback: {0}", ex.Message);
                         }
                     }
                     else
                     {
-                        UpdateStatusLbl(String.Format($"{_adapter} is down..."));
+                        UpdateStatusLbl(String.Format($"{_adapterName} is down..."));
                         SetIpaText(String.Empty);
                         SetSpeed();
                     }
@@ -321,7 +334,7 @@ namespace WetWorks_NetWorks
             //loop thru adapters and find the one 
             foreach (NetworkInterface n in adapters)
             {
-                if (n.Name == _adapter)
+                if (n.Name == _adapterName)
                 {
                     _nic = n;
                     break;
@@ -344,7 +357,7 @@ namespace WetWorks_NetWorks
             }
             else
             {
-                UpdateStatusLbl(String.Format($"{_adapter} is down..."));
+                UpdateStatusLbl(String.Format($"{_adapterName} is down..."));
                 SetIpaText(String.Empty);
                 SetSpeed();
             }
@@ -353,7 +366,7 @@ namespace WetWorks_NetWorks
         private void CheckAdapterAfterTimeOut(object sender, EventArgs e)
         {
             //upon expiration of timer, Rerun UpdateAdapterInfo()
-            _timer.Stop();
+            _adapterCheckTimer.Stop();
             UpdateAdapterInfo();
         }
 
@@ -392,111 +405,19 @@ namespace WetWorks_NetWorks
 
                         if (_adapterType == NetworkInterfaceType.Wireless80211) //selected adapter 
                         {
-                            if (nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                            if (nic.Name.Contains("Wi-Fi"))
                             {
-                                if (nic.Name.Contains("Wi-Fi"))
-                                {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
-                                    {
-                                        //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                                        _nic = nic;
-                                        _adapter = nic.Name;
-
-                                        IPInterfaceProperties prop = _nic.GetIPProperties();
-                                        Domain domain = Domain.GetCurrentDomain();
-                                        string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
-
-                                        speed = SpeedCalc(nic);
-                                        SetSpeed();
-
-                                        //update UI fields
-                                        this.Dispatcher.Invoke(() =>
-                                        {
-                                            adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = domainName;
-                                            UpdateStatusLbl(String.Empty);
-                                        });
-
-                                        wifiSelected = true;
-                                        ethernetSelected = false;
-
-                                        UdpateInterfaceButton();
-
-                                        if (ipv4Props.IsDhcpEnabled)
-                                        {
-                                            choiceSelect = 1;
-                                            ChoiceInterlock(choiceSelect);
-                                        }
-
-                                        _adapterCount++;
-
-                                        foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                                        {
-                                            UpdateAdapterUIInfo(ip);
-                                        }
-
-                                        if (_adapterCount != 0)
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
+                                SendAdapterUpdateToUI(nic, ipv4Props, false);
                             }
+
                         }
                         else if (_adapterType == NetworkInterfaceType.Ethernet) //selected adapter 
                         {
-                            if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                            if (nic.Name.Contains("Ethernet"))
                             {
-                                if (nic.Name.Contains("Ethernet"))
-                                {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.ToLower().Contains("loopback") & !nic.Name.ToLower().Contains("bluetooth") & !nic.Description.ToLower().Contains("virtual"))
-                                    {
-                                        //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                                        _nic = nic;
-                                        _adapter = nic.Name;
-
-                                        IPInterfaceProperties prop = _nic.GetIPProperties();
-                                        Domain domain = Domain.GetCurrentDomain();
-                                        string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
-
-                                        speed = SpeedCalc(nic);
-                                        SetSpeed();
-
-                                        //update UI fields
-                                        this.Dispatcher.Invoke(() =>
-                                        {
-                                            adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = domainName;
-                                            UpdateStatusLbl(String.Empty);
-                                        });
-
-                                        ethernetSelected = true;
-                                        wifiSelected = false;
-
-                                        UdpateInterfaceButton();
-
-                                        if (ipv4Props.IsDhcpEnabled)
-                                        {
-                                            choiceSelect = 1;
-                                            ChoiceInterlock(choiceSelect);
-                                        }
-
-                                        _adapterCount++;
-
-                                        foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                                        {
-                                            UpdateAdapterUIInfo(ip);
-                                        }
-
-                                        if (_adapterCount != 0)
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
+                                SendAdapterUpdateToUI(nic, ipv4Props, true);
                             }
+                            
                         }
                     }
                 }
@@ -512,10 +433,10 @@ namespace WetWorks_NetWorks
             {
                 //if no active wired adapters found, start a 5 second timer
                 //after 5 seconds, run UpdateAdapterInfo() again
-                _timer = new System.Windows.Forms.Timer();
-                _timer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
-                _timer.Interval = 5000;
-                _timer.Start();
+                _adapterCheckTimer = new System.Windows.Forms.Timer();
+                _adapterCheckTimer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
+                _adapterCheckTimer.Interval = 5000;
+                _adapterCheckTimer.Start();
                 UpdateStatusLbl("Waiting for active adapter");
             }
             
@@ -542,112 +463,18 @@ namespace WetWorks_NetWorks
                     {
                         if (_adapterType == NetworkInterfaceType.Wireless80211) //selected adapter 
                         {
-                            if (nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                            if (nic.Name.Contains("Wi-Fi"))
                             {
-                                if (nic.Name.Contains("Wi-Fi"))
-                                {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
-                                    {
-                                        //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                                        _nic = nic;
-                                        _adapter = nic.Name;
-                                        Console.WriteLine($"DNS: {_nic.GetIPProperties().DnsSuffix}");
-
-                                        IPInterfaceProperties prop = _nic.GetIPProperties();
-                                        Domain domain = Domain.GetCurrentDomain();
-                                        string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
-
-                                        speed = SpeedCalc(nic);
-                                        SetSpeed();
-
-                                        //update UI fields
-                                        this.Dispatcher.Invoke(() =>
-                                        {
-                                            adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = domainName;
-                                            UpdateStatusLbl(String.Empty);
-                                        });
-
-                                        wifiSelected = true;
-                                        ethernetSelected = false;
-
-                                        UdpateInterfaceButton();
-
-                                        if (ipv4Props.IsDhcpEnabled)
-                                        {
-                                            choiceSelect = 1;
-                                            ChoiceInterlock(choiceSelect);
-                                        }
-
-                                        _adapterCount++;
-
-                                        foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                                        {
-                                            UpdateAdapterUIInfo(ip);
-                                        }
-
-                                        if (_adapterCount != 0)
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
+                                SendAdapterUpdateToUI(nic,ipv4Props,false);
                             }
+
                         }
                         else if (_adapterType == NetworkInterfaceType.Ethernet) //selected adapter 
                         {
-                            if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                            if (nic.Name.Contains("Ethernet"))
                             {
-                                if (nic.Name.Contains("Ethernet"))
-                                {
-                                    if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth") & !nic.Description.ToLower().Contains("virtual"))
-                                    {
-                                        //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                                        _nic = nic;
-                                        _adapter = nic.Name;
-
-                                        IPInterfaceProperties prop = _nic.GetIPProperties();
-                                        Domain domain = Domain.GetCurrentDomain();
-                                        string domainName = prop.DnsSuffix;
-                                        domainName = string.IsNullOrEmpty(domainName) ? domain.Name : domainName;
-
-                                        speed = SpeedCalc(nic);
-                                        SetSpeed();
-
-                                        //update UI fields
-                                        this.Dispatcher.Invoke(() =>
-                                        {
-                                            adapterTxt.Content = String.Format($"{_adapter}");
-                                            domainTxt.Content = domainName;
-                                            UpdateStatusLbl(String.Empty);
-                                        });
-
-                                        ethernetSelected = true;
-                                        wifiSelected = false;
-
-                                        UdpateInterfaceButton();
-
-                                        if (ipv4Props.IsDhcpEnabled)
-                                        {
-                                            choiceSelect = 1;
-                                            ChoiceInterlock(choiceSelect);
-                                        }
-
-                                        _adapterCount++;
-
-                                        foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                                        {
-                                            UpdateAdapterUIInfo(ip);
-                                        }
-
-                                        if (_adapterCount != 0)
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
+                                SendAdapterUpdateToUI(nic, ipv4Props, true);
+                            }                           
                         }
                     }
                 }
@@ -663,10 +490,10 @@ namespace WetWorks_NetWorks
             {
                 //if no active wired adapters found, start a 5 second timer
                 //after 5 seconds, run UpdateAdapterInfo() again
-                _timer = new System.Windows.Forms.Timer();
-                _timer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
-                _timer.Interval = 5000;
-                _timer.Start();
+                _adapterCheckTimer = new System.Windows.Forms.Timer();
+                _adapterCheckTimer.Tick += new EventHandler(CheckAdapterAfterTimeOut);
+                _adapterCheckTimer.Interval = 5000;
+                _adapterCheckTimer.Start();
                 UpdateStatusLbl("Waiting for active adapter");
             }
         }
@@ -679,7 +506,7 @@ namespace WetWorks_NetWorks
  
                 this.Dispatcher.Invoke(() => 
                 {
-                    adapterTxt.Content = String.Format($"{_adapter}");
+                    adapterTxt.Content = String.Format($"{_adapterName}");
                     hostnameTxt.Content = Dns.GetHostName();             
                     SetIpaText(String.Format($"{ip.Address} / {ip.PrefixLength}"));
                 });
@@ -730,6 +557,75 @@ namespace WetWorks_NetWorks
 
             return null;
         }
+
+        public string GetDomainName()
+        {
+            try
+            {
+                Domain domain = Domain.GetCurrentDomain();
+                return domain.Name;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Could not retieve Domain Name");
+                return "Not Defined";
+            }
+        }
+
+        /// <summary>
+        /// Manages upadting the UI with info concerning the Adapter Name, IP, Domain etc
+        /// </summary>
+        /// <param name="nic" >The Network Interface to be used</param>
+        /// <param name="ipv4Props">The IPv4 Properties object for the Nic</param>
+        /// <param name="isEthernet">Wether or not the NIC is wireless or wired ethernet</param>
+        public void SendAdapterUpdateToUI(NetworkInterface nic, IPv4InterfaceProperties ipv4Props, bool isEthernet)
+        {
+            if (!nic.Name.ToLower().Contains("vethernet") & !nic.Name.ToLower().Contains("loopback") & !nic.Name.ToLower().Contains("bluetooth") & !nic.Description.ToLower().Contains("virtual"))
+            {
+                //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
+                _nic = nic;
+                _adapterName = nic.Name;
+
+                IPInterfaceProperties prop = _nic.GetIPProperties();
+                string domainName = GetDomainName();
+                string primaryDnsSuffixName = prop.DnsSuffix;
+                primaryDnsSuffixName = string.IsNullOrEmpty(primaryDnsSuffixName) ? domainName : primaryDnsSuffixName;
+
+                _speed = SpeedCalc(nic);
+                SetSpeed();
+
+                //update UI fields
+                this.Dispatcher.Invoke(() =>
+                {
+                    adapterTxt.Content = String.Format($"{_adapterName}");
+                    domainTxt.Content = domainName;
+                    UpdateStatusLbl(String.Empty);
+                });
+
+                isEthernetSelected = isEthernet;
+                isWifiSelected = !isEthernet;
+
+                UdpateInterfaceButton();
+
+                if (ipv4Props.IsDhcpEnabled)
+                {
+                    choiceSelect = 1;
+                    ChoiceInterlock(choiceSelect);
+                }
+
+                _adapterCount++;
+
+                foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
+                {
+                    UpdateAdapterUIInfo(ip);
+                }
+
+                if (_adapterCount != 0)
+                {
+                    return;
+                }
+            }
+        }
         #endregion
 
         
@@ -758,8 +654,8 @@ namespace WetWorks_NetWorks
         {
             this.Dispatcher.Invoke(() => 
             {
-                wifiBtn.IsChecked = wifiSelected;
-                ethernetBtn.IsChecked = ethernetSelected;
+                wifiBtn.IsChecked = isWifiSelected;
+                ethernetBtn.IsChecked = isEthernetSelected;
             });
         }
 
@@ -817,7 +713,7 @@ namespace WetWorks_NetWorks
                                     ProcessStartInfo info = new ProcessStartInfo
                                     {
                                         FileName = "netsh.exe",
-                                        Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask),
+                                        Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapterName, ip, mask),
                                         CreateNoWindow = true,
                                         UseShellExecute = true,
                                         Verb = "runas",
@@ -871,7 +767,7 @@ namespace WetWorks_NetWorks
                                         ProcessStartInfo info = new ProcessStartInfo
                                         {
                                             FileName = "netsh.exe",
-                                            Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask),
+                                            Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapterName, ip, mask),
                                             CreateNoWindow = true,
                                             UseShellExecute = true,
                                             Verb = "runas",
@@ -958,7 +854,7 @@ namespace WetWorks_NetWorks
             string speedSuffix = string.Empty;
             decimal div = 0;
 
-            if (Math.Round(speed  / 1000000d, 0) >= 999) 
+            if (Math.Round(_speed  / 1000000d, 0) >= 999) 
             {
                 speedSuffix = "Gbps";
                 div = 1000;
@@ -971,7 +867,7 @@ namespace WetWorks_NetWorks
 
             this.Dispatcher.Invoke(() =>
             {
-                speedTxt.Content = String.Format($"{Math.Round(speed  / (1000000 * div), 0)} {speedSuffix}");
+                speedTxt.Content = String.Format($"{Math.Round(_speed  / (1000000 * div), 0)} {speedSuffix}");
             });
 
 
