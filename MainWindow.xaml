@@ -16,13 +16,12 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="13*" />
-            
-            <ColumnDefinition Width="13*"/>
-            <ColumnDefinition Width="13*" />
-            <ColumnDefinition Width="13*" />
-            <ColumnDefinition Width="13*" />
-            <ColumnDefinition Width="13*" />
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="12*"/>
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="12*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -131,7 +130,9 @@
 
             <RadioButton Content="WIRELESS" 
                     x:Name="wifiBtn"
-                    Width="350"     
+                    Width="350"    
+                    BorderBrush="Azure"
+                    BorderThickness="0,0,0,2"
                     Style="{StaticResource InterfaceButtonTheme}" Click="WifiBtn_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="2"
@@ -169,7 +170,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="37" />
+                            <RowDefinition Height="39" />
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
@@ -322,8 +323,10 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Content="HOSTNAME"
-                               Foreground="White"
+                               Foreground="#60ffffff"
                                Margin="10,0,0,0"
+                               Padding="0"
+                               FontSize="11"
                                />
 
                         <Label x:Name="hostnameTxt"
@@ -346,8 +349,10 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Content="DOMAIN"
-                               Foreground="White"
+                               Foreground="#60ffffff"
                                Margin="10,0,0,0"
+                               Padding="0"
+                               FontSize="11"
                                
                                />
 
@@ -371,8 +376,10 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Content="ADAPTER"
-                               Foreground="White"
+                               Foreground="#60ffffff"
                                Margin="10,0,0,0"
+                               Padding="0"
+                               FontSize="11"
                                />
 
                         <Label x:Name="adapterTxt"
@@ -395,8 +402,10 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Content="IP ADDRESS"
-                               Foreground="White"
+                               Foreground="#60ffffff"
                                Margin="10,0,0,0"
+                               Padding="0"
+                               FontSize="11"
                                
                                />
 
@@ -419,8 +428,10 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Content="SPEED"
-                               Foreground="White"
+                               Foreground="#60ffffff"
                                Margin="10,0,0,0"
+                               Padding="0,0,0,1"
+                               FontSize="11"
                                />
 
                         <Label x:Name="speedTxt"
