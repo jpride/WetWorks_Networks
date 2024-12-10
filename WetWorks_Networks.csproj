@@ -155,9 +155,6 @@
     <Resource Include="cthulhu_blur.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Panel.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Stack Panel BG.png" />
   </ItemGroup>
   <ItemGroup>

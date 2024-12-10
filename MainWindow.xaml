@@ -96,11 +96,11 @@
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"
-                Content="Select an Interface"
+                HorizontalAlignment="Center"
+                Content="SELECT AN INTERFACE"
                 FontSize="20"
                 Foreground="Black" 
-                Margin="31,0,0,0" />
+                Margin="0,0,0,0" />
 
         <Border Width="700"                      
                 Grid.Row="1"
@@ -299,7 +299,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="39" />
+                            <RowDefinition Height="38"/>
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
@@ -324,8 +324,8 @@
                                VerticalAlignment="Bottom"
                                Content="HOSTNAME"
                                Foreground="#60ffffff"
-                               Margin="10,0,0,0"
-                               Padding="0"
+                               Margin="6,0,0,0"
+                               Padding="0,0,0,1"
                                FontSize="11"
                                />
 
@@ -348,10 +348,10 @@
                         <Label Grid.Row="2"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
-                               Content="DOMAIN"
+                               Content="DNS SUFFIX"
                                Foreground="#60ffffff"
-                               Margin="10,0,0,0"
-                               Padding="0"
+                               Margin="6,0,0,0"
+                               Padding="0,0,0,1"
                                FontSize="11"
                                
                                />
@@ -377,8 +377,8 @@
                                VerticalAlignment="Bottom"
                                Content="ADAPTER"
                                Foreground="#60ffffff"
-                               Margin="10,0,0,0"
-                               Padding="0"
+                               Margin="6,0,0,0"
+                               Padding="0,0,0,1"
                                FontSize="11"
                                />
 
@@ -403,8 +403,8 @@
                                VerticalAlignment="Bottom"
                                Content="IP ADDRESS"
                                Foreground="#60ffffff"
-                               Margin="10,0,0,0"
-                               Padding="0"
+                               Margin="6,0,0,0"
+                               Padding="0,0,0,1"
                                FontSize="11"
                                
                                />
@@ -429,7 +429,7 @@
                                VerticalAlignment="Bottom"
                                Content="SPEED"
                                Foreground="#60ffffff"
-                               Margin="10,0,0,0"
+                               Margin="6,0,0,0"
                                Padding="0,0,0,1"
                                FontSize="11"
                                />
