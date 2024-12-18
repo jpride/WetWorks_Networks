@@ -18,6 +18,9 @@ namespace WetWorks_NetWorks
     {
         #region ******** Variables ********
 
+        public Boolean debug = true;
+
+
         public int choiceSelect = 0;
 
         public bool isEthernetSelected = false;
@@ -563,6 +566,7 @@ namespace WetWorks_NetWorks
             try
             {
                 Domain domain = Domain.GetCurrentDomain();
+                if (debug) { Console.WriteLine($"Domain Name : {domain}"); }
                 return domain.Name;
             }
             catch (Exception)
@@ -579,7 +583,7 @@ namespace WetWorks_NetWorks
         /// <param name="ipv4Props">The IPv4 Properties object for the Nic</param>
         /// <param name="isEthernet">Wether or not the NIC is wireless or wired ethernet</param>
         public void SendAdapterUpdateToUI(NetworkInterface nic, IPv4InterfaceProperties ipv4Props, bool isEthernet)
-        {
+        {     
             if (!nic.Name.ToLower().Contains("vethernet") & !nic.Name.ToLower().Contains("loopback") & !nic.Name.ToLower().Contains("bluetooth") & !nic.Description.ToLower().Contains("virtual"))
             {
                 //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
@@ -587,10 +591,13 @@ namespace WetWorks_NetWorks
                 _adapterName = nic.Name;
 
                 IPInterfaceProperties prop = _nic.GetIPProperties();
-                string domainName = GetDomainName();
-                string primaryDnsSuffixName = prop.DnsSuffix;
-                primaryDnsSuffixName = string.IsNullOrEmpty(primaryDnsSuffixName) ? domainName : primaryDnsSuffixName;
 
+                //domain name display 
+                //string domainName = GetDomainName();
+                string connectionSpecificDNSSuffix = prop.DnsSuffix;
+                string domainNameForUI = string.IsNullOrEmpty(connectionSpecificDNSSuffix) ? "none defined" : connectionSpecificDNSSuffix;
+
+                //speed display
                 _speed = SpeedCalc(nic);
                 SetSpeed();
 
@@ -598,7 +605,7 @@ namespace WetWorks_NetWorks
                 this.Dispatcher.Invoke(() =>
                 {
                     adapterTxt.Content = String.Format($"{_adapterName}");
-                    domainTxt.Content = domainName;
+                    domainTxt.Content = domainNameForUI;
                     UpdateStatusLbl(String.Empty);
                 });
 

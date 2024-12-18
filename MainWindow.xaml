@@ -348,7 +348,7 @@
                         <Label Grid.Row="2"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
-                               Content="DOMAIN"
+                               Content="DNS SUFFIX"
                                Foreground="#60ffffff"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
