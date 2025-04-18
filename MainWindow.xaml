@@ -8,11 +8,203 @@
         Title="Wetwork IP" 
         Height="460" 
         Width="700"
-        Background="#EF131D34" 
+        Background="#EF4B5367" 
         ResizeMode="NoResize" 
         KeyDown="OnKeyDownInMainWindowHandler" 
         WindowStartupLocation="CenterScreen">
-    
+    <Window.Resources>
+        <BitmapImage x:Key="EthernetIcon" UriSource="/ethernet icon.png" />
+        <BitmapImage x:Key="WifiIcon" UriSource="/wifi icon.png" />
+        
+        <SolidColorBrush x:Key="ActiveButtonColor" Color="#FF1D65D7" />
+        <SolidColorBrush x:Key="HoverButtonColor" Color="#A02C70CC" />
+        <SolidColorBrush x:Key="InactiveButtonColor" Color="Transparent"/>
+        
+        <SolidColorBrush x:Key="BackgroundColor" Color="#FFB0B0B1" />
+        <SolidColorBrush x:Key="CurrentSettingsTextColor" Color="#000" />
+        
+        <SolidColorBrush x:Key="SchemeButtonInactiveColor" Color="Transparent" />
+        <SolidColorBrush x:Key="SchemeButtonHoverColor" Color="#FF1D65D7" />
+        <SolidColorBrush x:Key="SchemeButtonActiveColor" Color="#FF1D65D7" />
+
+        <SolidColorBrush x:Key="SchemeTextColor" Color="#000" />
+
+        <SolidColorBrush x:Key="RectangleBackColor" Color="#222" />
+
+        <Style TargetType="Button"
+           x:Key="LogoButtonTheme">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Rectangle x:Name="background"
+                                   Fill="{TemplateBinding Background}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="background" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="{x:Type RadioButton}"
+               x:Key="ImageTextRadioButtonStyle">
+            <Setter Property="Width"
+                    Value="360" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <Image x:Name="ButtonImage"
+                                       Height="26"
+                                       Source="{TemplateBinding Tag}"
+                                       Margin="0,0,10,0" />
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ActiveButtonColor}" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="20"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource HoverButtonColor}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+                
+               
+            </Setter>
+            <Setter Property="Background"
+                    Value="{StaticResource InactiveButtonColor}" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
+           TargetType="{x:Type RadioButton}"
+           x:Key="SchemeButtonTheme">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Grid VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              Background="{TemplateBinding Background}">
+
+                                <TextBlock x:Name="TxtBlock"
+                                       Text="{TemplateBinding Property=Content}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{StaticResource SchemeTextColor}"
+                                       FontSize="14"
+                                       />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Background" Value="{StaticResource SchemeButtonInactiveColor}" />
+                <Setter Property="BorderThickness" Value="0" />
+
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{StaticResource SchemeButtonHoverColor}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver"  Value="True">
+                    <Setter Property="Background" Value="{StaticResource SchemeButtonActiveColor}" />
+                </Trigger>
+
+                <Trigger Property="IsChecked" Value="False">
+
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+     
+        <Style TargetType="{x:Type Rectangle}"
+           x:Key="AccentRectangleTheme">
+            <Setter Property="Fill" Value="{StaticResource RectangleBackColor}" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}" x:Key="ModernTextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border CornerRadius="10" Background="#20FFFFFF" Height="30">
+                            <Grid>
+                                <Rectangle StrokeThickness="1" />
+                                <TextBox   Margin="1"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
+                                       BorderThickness="0"
+                                       Background="Transparent"
+                                       VerticalContentAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Padding="5"
+                                       Foreground="{StaticResource SchemeTextColor}"
+                                       FontSize="13"
+                                       x:Name="userEntryTextBox"/>
+
+                                <TextBlock IsHitTestVisible="False"
+                                       Text="Enter IP/Maskbits"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Margin="10,0,0,0"
+                                       FontSize="13"
+                                       Foreground="#444"
+                                       Grid.Column="1">
+
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=userEntryTextBox}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </Style>
+                                    </TextBlock.Style>
+
+                                </TextBlock>
+
+
+
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -106,35 +298,59 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.RowSpan="2"
-                Grid.ColumnSpan="7">
+                Grid.ColumnSpan="7"
+                Background="{StaticResource BackgroundColor}">
+            <!--
             <Border.Background>
                 <LinearGradientBrush EndPoint="0,0" StartPoint="1,2">
                     <GradientStop Color="#33799B" Offset="0"/>
                     <GradientStop Color="#100F3B76" Offset=".75" />
                 </LinearGradientBrush>
             </Border.Background>
+            -->
         </Border>
 
 
         <StackPanel Grid.Row="1"
                     Grid.ColumnSpan="7"
-                    Orientation="Horizontal"
-                    >
+                    Orientation="Horizontal">
 
-            <RadioButton Content="ETHERNET"
+
+            <RadioButton 
                     x:Name="ethernetBtn"
                     Width="350"
                     BorderBrush="Azure"
-                    BorderThickness="0,0,0,2"
-                    Style="{StaticResource InterfaceButtonTheme}" Click="EthernetBtn_Click"/>
+                    BorderThickness="0,0,0,1"
+                    FontSize="18"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Content="ETHERNET"
+                    Tag="{StaticResource EthernetIcon}"
+                    Style="{StaticResource ImageTextRadioButtonStyle}" Click="EthernetBtn_Click">
 
-            <RadioButton Content="WIRELESS" 
+            </RadioButton>
+
+            <RadioButton 
                     x:Name="wifiBtn"
-                    Width="350"    
+                    Width="350"
                     BorderBrush="Azure"
-                    BorderThickness="0,0,0,2"
-                    Style="{StaticResource InterfaceButtonTheme}" Click="WifiBtn_Click"/>
+                    BorderThickness="0,0,0,1"
+                    FontSize="18"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Content="WIFI"
+                    Tag="{StaticResource WifiIcon}"
+                    Style="{StaticResource ImageTextRadioButtonStyle}" Click="WifiBtn_Click">
+
+            </RadioButton>
+
+
+
         </StackPanel>
+        
+        
+        
+        
         <StackPanel Grid.Row="2"
                     Grid.ColumnSpan="7"
                     Orientation="Horizontal"
@@ -321,12 +537,12 @@
 
                         <Label Grid.Row="1"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Content="HOSTNAME"
-                               Foreground="#60ffffff"
+                               VerticalAlignment="Top"
+                               Content="[HOSTNAME]"
+                               Foreground="#FF020E25"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
-                               FontSize="11"
+                               FontSize="12"
                                />
 
                         <Label x:Name="hostnameTxt"
@@ -334,7 +550,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="TSIL-JEFFPRIDE"
-                               Foreground="White" 
+                               Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="13"
                                Margin="20,0,0,0"
@@ -347,12 +563,12 @@
 
                         <Label Grid.Row="2"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Content="DNS SUFFIX"
-                               Foreground="#60ffffff"
+                               VerticalAlignment="Top"
+                               Content="[DOMAIN]"
+                               Foreground="#FF020E25"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
-                               FontSize="11"
+                               FontSize="12"
                                
                                />
 
@@ -361,7 +577,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="tsi-inc.local"
-                               Foreground="White"
+                               Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="13"
                                Margin="20,0,0,0"
@@ -374,12 +590,12 @@
 
                         <Label Grid.Row="3"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Content="ADAPTER"
-                               Foreground="#60ffffff"
+                               VerticalAlignment="Top"
+                               Content="[ADAPTER]"
+                               Foreground="#FF020E25"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
-                               FontSize="11"
+                               FontSize="12"
                                />
 
                         <Label x:Name="adapterTxt"
@@ -387,7 +603,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="ETHERNET"
-                               Foreground="White"
+                               Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="13"
                                Margin="20,0,0,0"
@@ -400,12 +616,12 @@
 
                         <Label Grid.Row="4"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Content="IP ADDRESS"
-                               Foreground="#60ffffff"
+                               VerticalAlignment="Top"
+                               Content="[IP ADDRESS]"
+                               Foreground="#FF020E25"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
-                               FontSize="11"
+                               FontSize="12"
                                
                                />
 
@@ -414,7 +630,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="192.168.86.52 / 16"
-                               Foreground="White"
+                               Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="13"
                                Margin="20,0,0,0"
@@ -426,12 +642,12 @@
 
                         <Label Grid.Row="5"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Content="SPEED"
-                               Foreground="#60ffffff"
+                               VerticalAlignment="Top"
+                               Content="[SPEED]"
+                               Foreground="#FF020E25"
                                Margin="6,0,0,0"
                                Padding="0,0,0,1"
-                               FontSize="11"
+                               FontSize="12" 
                                />
 
                         <Label x:Name="speedTxt"
@@ -439,7 +655,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="600 Mbps"
-                               Foreground="White"
+                               Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="13"
                                Margin="20,0,0,0"

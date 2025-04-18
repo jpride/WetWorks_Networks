@@ -420,7 +420,6 @@ namespace WetWorks_NetWorks
                             {
                                 SendAdapterUpdateToUI(nic, ipv4Props, true);
                             }
-                            
                         }
                     }
                 }
