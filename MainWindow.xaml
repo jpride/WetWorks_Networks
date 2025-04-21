@@ -8,7 +8,7 @@
         Title="Wetwork IP" 
         Height="460" 
         Width="700"
-        Background="#EF4B5367" 
+        Background="#DDD" 
         ResizeMode="NoResize" 
         KeyDown="OnKeyDownInMainWindowHandler" 
         WindowStartupLocation="CenterScreen">
@@ -20,7 +20,7 @@
         <SolidColorBrush x:Key="HoverButtonColor" Color="#A02C70CC" />
         <SolidColorBrush x:Key="InactiveButtonColor" Color="Transparent"/>
         
-        <SolidColorBrush x:Key="BackgroundColor" Color="#FFB0B0B1" />
+        <SolidColorBrush x:Key="BackgroundColor" Color="#BBB0B0B1" />
         <SolidColorBrush x:Key="CurrentSettingsTextColor" Color="#000" />
         
         <SolidColorBrush x:Key="SchemeButtonInactiveColor" Color="Transparent" />
@@ -116,24 +116,37 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RadioButton">
-                            <Grid VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch"
-                              Background="{TemplateBinding Background}">
+                            <Border BorderBrush="#FF837D7D"
+                            BorderThickness="1"
+                            Background="{TemplateBinding Background}"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch">
+                                
+                            <Grid   VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{TemplateBinding Background}">
 
-                                <TextBlock x:Name="TxtBlock"
-                                       Text="{TemplateBinding Property=Content}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Foreground="{StaticResource SchemeTextColor}"
-                                       FontSize="14"
-                                       />
+                            <TextBlock  x:Name="TxtBlock"
+                                        Text="{TemplateBinding Property=Content}"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Foreground="{StaticResource SchemeTextColor}"
+                                        FontWeight="Bold"
+                                        FontSize="14"/>
                             </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="TxtBlock" Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                            
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
 
                 <Setter Property="Background" Value="{StaticResource SchemeButtonInactiveColor}" />
-                <Setter Property="BorderThickness" Value="0" />
+                
 
             </Style.Setters>
             <Style.Triggers>
@@ -367,14 +380,16 @@
                    
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Column="0"
+                <StackPanel Name="Scheme_StackPanel"
+                            Grid.Column="0"
                             Grid.Row="0"
                             Grid.RowSpan="2"
                             Orientation="Vertical"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Width="300"
-                            Margin="10,15,25,7">
+                            Width="300"   
+                            Height="253"
+                            Margin="10,10,25,7">
 
                     <StackPanel.Background>
                         <ImageBrush ImageSource="/Stack Panel BG.png"
@@ -392,8 +407,11 @@
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
-
                         </Grid.RowDefinitions>
+                        <Border Grid.RowSpan="6"
+                                BorderBrush="#FF7E7E7E"
+                                BorderThickness="1,1,1,2"
+                                CornerRadius="0"/>
 
                         <Label  Grid.Row="0"
                                 Margin="5"
@@ -497,14 +515,16 @@
 
                 </StackPanel>
 
-                <StackPanel Grid.Column="1"
+                <StackPanel Name="Settings_StackPanel"
+                            Grid.Column="1"
                             Grid.Row="0"
                             Grid.RowSpan="1"
                             Orientation="Vertical"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="300"
-                            Margin="25,15,10,7">
+                            Height="253"
+                            Margin="25,10,10,7">
                     <StackPanel.Background>
                         <ImageBrush ImageSource="/Stack Panel BG.png" 
                                     Stretch="Uniform"/>
@@ -521,8 +541,12 @@
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
-
                         </Grid.RowDefinitions>
+                        
+                        <Border Grid.RowSpan="6"
+                                BorderBrush="#FF7E7E7E"
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="0"/> 
 
                         <Label  Grid.Row="0"
                                 Margin="5"
@@ -672,17 +696,21 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="7"
                     Orientation="Horizontal"
-                    Background="#0FFFFFFF">
+                    Background="#444655">
 
             <Label x:Name="statusLbl"
                    HorizontalAlignment="Left"
                    Margin="5,0,0,0"
                    Content="STATUS"
+                   FontSize="16"
                    Foreground="GhostWhite"/>
 
             <Label x:Name="statusTxt"
                    HorizontalAlignment="Center"
                    Foreground="GhostWhite"
+                   FontSize="13"
+                   Margin="10,0,0,0"
+                   FontStyle="Italic"
                    Content="This is a long sentence to test this label" />
 
         </StackPanel>
