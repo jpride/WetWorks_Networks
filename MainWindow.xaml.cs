@@ -7,7 +7,8 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Reflection;
-using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 
 
 
@@ -187,6 +188,7 @@ namespace WetWorks_NetWorks
                 case 1:
                     this.Dispatcher.Invoke(() => 
                     {
+                        FadeInAndOut(choice1AccentBtn);
                         choice1AccentBtn.Visibility = Visibility.Visible;
                         choice1Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -196,6 +198,7 @@ namespace WetWorks_NetWorks
                 case 2:
                     this.Dispatcher.Invoke(() =>
                     {
+                        FadeInAndOut(choice2AccentBtn);
                         choice2AccentBtn.Visibility = Visibility.Visible;
                         choice2Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -204,6 +207,7 @@ namespace WetWorks_NetWorks
                 case 3:
                     this.Dispatcher.Invoke(() =>
                     {
+                        FadeInAndOut(choice3AccentBtn);
                         choice3AccentBtn.Visibility = Visibility.Visible;
                         choice3Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -212,14 +216,17 @@ namespace WetWorks_NetWorks
                 case 4:
                     this.Dispatcher.Invoke(() =>
                     {
+                        
                         choice4AccentBtn.Visibility = Visibility.Visible;
                         choice4Btn.IsChecked = true;
+                        FadeInAndOut(choice4AccentBtn);
                         ResetUserEntryText();
                     });
                     break;
                 case 5:
                     this.Dispatcher.Invoke(() =>
                     {
+                        FadeInAndOut(choice5AccentBtn);
                         choice5AccentBtn.Visibility = Visibility.Visible;
                         choice5Btn.IsChecked = true;
                     });
@@ -644,6 +651,7 @@ namespace WetWorks_NetWorks
                 {
                     statusLbl.Visibility = Visibility.Visible;
                     statusTxt.Content = String.Format($"{msg}");
+                    //ipaTxt.Content = statusTxt.Content;
                 });
             }
             else
@@ -1000,6 +1008,42 @@ namespace WetWorks_NetWorks
             });
 
 
+        }
+
+        private void FadeInAndOut(DependencyObject d)
+        {
+            DoubleAnimation fadeInAnimation = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = TimeSpan.FromSeconds(3)
+            };
+
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(2)
+            };
+
+            // Create a Storyboard to sequence the animations
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(fadeInAnimation);
+            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(fadeInAnimation, d);
+
+            // Begin the fade-in
+            storyboard.Begin();
+
+            // After the fade-in completes, start the fade-out
+            storyboard.Completed += (s, e) =>
+            {
+                Storyboard storyboardOut = new Storyboard();
+                storyboardOut.Children.Add(fadeOutAnimation);
+                Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath(UIElement.OpacityProperty));
+                Storyboard.SetTarget(fadeOutAnimation, d);
+                storyboardOut.Begin();
+            };
         }
         #endregion
 

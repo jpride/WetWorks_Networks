@@ -13,209 +13,7 @@
         KeyDown="OnKeyDownInMainWindowHandler" 
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <BitmapImage x:Key="EthernetIcon" UriSource="/ethernet icon.png" />
-        <BitmapImage x:Key="WifiIcon" UriSource="/wifi icon.png" />
-        
-        <SolidColorBrush x:Key="ActiveButtonColor" Color="#FF1D65D7" />
-        <SolidColorBrush x:Key="HoverButtonColor" Color="#A02C70CC" />
-        <SolidColorBrush x:Key="InactiveButtonColor" Color="Transparent"/>
-        
-        <SolidColorBrush x:Key="BackgroundColor" Color="#BBB0B0B1" />
-        <SolidColorBrush x:Key="CurrentSettingsTextColor" Color="#000" />
-        
-        <SolidColorBrush x:Key="SchemeButtonInactiveColor" Color="Transparent" />
-        <SolidColorBrush x:Key="SchemeButtonHoverColor" Color="#FF1D65D7" />
-        <SolidColorBrush x:Key="SchemeButtonActiveColor" Color="#FF1D65D7" />
-
-        <SolidColorBrush x:Key="SchemeTextColor" Color="#000" />
-
-        <SolidColorBrush x:Key="RectangleBackColor" Color="#222" />
-
-        <Style TargetType="Button"
-           x:Key="LogoButtonTheme">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid>
-                                <Rectangle x:Name="background"
-                                   Fill="{TemplateBinding Background}"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="background" Property="Opacity" Value="0.5"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style TargetType="{x:Type RadioButton}"
-               x:Key="ImageTextRadioButtonStyle">
-            <Setter Property="Width"
-                    Value="360" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center">
-                                <Image x:Name="ButtonImage"
-                                       Height="26"
-                                       Source="{TemplateBinding Tag}"
-                                       Margin="0,0,10,0" />
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-
-                            </StackPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Background" Value="{StaticResource ActiveButtonColor}" />
-                                <Setter Property="Foreground" Value="Black" />
-                                <Setter Property="FontWeight" Value="Bold" />
-                                <Setter Property="FontSize" Value="20"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource HoverButtonColor}" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.5" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-                
-               
-            </Setter>
-            <Setter Property="Background"
-                    Value="{StaticResource InactiveButtonColor}" />
-            <Setter Property="Foreground"
-                    Value="Black" />
-            <Setter Property="BorderThickness"
-                    Value="0" />
-            <Setter Property="Padding"
-                    Value="5" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-        </Style>
-
-        <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
-           TargetType="{x:Type RadioButton}"
-           x:Key="SchemeButtonTheme">
-            <Style.Setters>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="RadioButton">
-                            <Border BorderBrush="#FF837D7D"
-                            BorderThickness="1"
-                            Background="{TemplateBinding Background}"
-                            VerticalAlignment="Stretch"
-                            HorizontalAlignment="Stretch">
-                                
-                            <Grid   VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Stretch"
-                                    Background="{TemplateBinding Background}">
-
-                            <TextBlock  x:Name="TxtBlock"
-                                        Text="{TemplateBinding Property=Content}"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Foreground="{StaticResource SchemeTextColor}"
-                                        FontWeight="Bold"
-                                        FontSize="14"/>
-                            </Grid>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="TxtBlock" Property="Foreground" Value="White"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                            
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-                <Setter Property="Background" Value="{StaticResource SchemeButtonInactiveColor}" />
-                
-
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{StaticResource SchemeButtonHoverColor}" />
-                </Trigger>
-                <Trigger Property="IsMouseOver"  Value="True">
-                    <Setter Property="Background" Value="{StaticResource SchemeButtonActiveColor}" />
-                </Trigger>
-
-                <Trigger Property="IsChecked" Value="False">
-
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-     
-        <Style TargetType="{x:Type Rectangle}"
-           x:Key="AccentRectangleTheme">
-            <Setter Property="Fill" Value="{StaticResource RectangleBackColor}" />
-        </Style>
-
-        <Style TargetType="{x:Type TextBox}" x:Key="ModernTextBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Border CornerRadius="10" Background="#20FFFFFF" Height="30">
-                            <Grid>
-                                <Rectangle StrokeThickness="1" />
-                                <TextBox   Margin="1"
-                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
-                                       BorderThickness="0"
-                                       Background="Transparent"
-                                       VerticalContentAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Padding="5"
-                                       Foreground="{StaticResource SchemeTextColor}"
-                                       FontSize="13"
-                                       x:Name="userEntryTextBox"/>
-
-                                <TextBlock IsHitTestVisible="False"
-                                       Text="Enter IP/Maskbits"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Margin="10,0,0,0"
-                                       FontSize="13"
-                                       Foreground="#444"
-                                       Grid.Column="1">
-
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=userEntryTextBox}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </Style>
-                                    </TextBlock.Style>
-
-                                </TextBlock>
-
-
-
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+    <!--Styles located in App.Xaml -->
 
     </Window.Resources>
 
@@ -236,8 +34,6 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-
-
         <Image Grid.Column="0" 
                Grid.Row="2" 
                Grid.ColumnSpan="7" 
@@ -249,7 +45,6 @@
                Margin="0,0,0,0" 
                Grid.RowSpan="2"
                />
-
 
         <Border Width="700"
                 Grid.Row="0"
@@ -401,6 +196,7 @@
                                 Margin="0"
                                 Content="SELECT AN IP SCHEME"
                                 FontWeight="Bold"
+                                FontSize="16"
                                 HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
@@ -506,7 +302,10 @@
                                 Background="#FFD6D5D5"
                                 FontWeight="DemiBold"
                                 HorizontalAlignment="Right"
-                                Click="userEntryApplyBtn_Click">Apply</Button>
+                                Style="{StaticResource RoundedButton}"
+                                Content="Apply"
+                                Click="userEntryApplyBtn_Click" UseLayoutRounding="True" />
+
 
 
                     </Grid>
@@ -547,6 +346,7 @@
                                 Margin="0"
                                 Content="CURRENT SETTINGS"
                                 FontWeight="Bold"
+                                FontSize="16"
                                 HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
@@ -577,8 +377,8 @@
                                Content="TSIL-JEFFPRIDE"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
-                               FontSize="13"
-                               Margin="20,0,0,0"
+                               FontSize="15"
+                               Margin="20,12,0,0"
                                />
 
 
@@ -604,8 +404,8 @@
                                Content="tsi-inc.local"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
-                               FontSize="13"
-                               Margin="20,0,0,0"
+                               FontSize="15"
+                               Margin="20,12,0,0"
                                />
 
 
@@ -630,8 +430,8 @@
                                Content="ETHERNET"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
-                               FontSize="13"
-                               Margin="20,0,0,0"
+                               FontSize="15"
+                               Margin="20,12,0,0"
                                />
 
 
@@ -657,8 +457,8 @@
                                Content="192.168.86.52 / 16"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
-                               FontSize="13"
-                               Margin="20,0,0,0"
+                               FontSize="15"
+                               Margin="20,12,0,0"
                                />
 
                         <Rectangle Grid.Row="5"
@@ -682,8 +482,8 @@
                                Content="600 Mbps"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
-                               FontSize="13"
-                               Margin="20,0,0,0"
+                               FontSize="15"
+                               Margin="20,12,0,0"
                                />
                     </Grid>
 
@@ -716,8 +516,6 @@
                    Content="This is a long sentence to test this label" />
 
         </StackPanel>
-
-
 
     </Grid>
 </Window>
