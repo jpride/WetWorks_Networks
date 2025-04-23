@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WetWorks_NetWorks"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Wetwork IP" 
         Height="460" 
@@ -15,6 +16,7 @@
     <Window.Resources>
     <!--Styles located in App.Xaml -->
 
+          
     </Window.Resources>
 
     <Grid>
@@ -289,7 +291,7 @@
                         <TextBox x:Name="userEntryTxt"
                                  Grid.Row="5"
                                  Height="30"
-                                 Margin="25,0,55,0"
+                                 Margin="15,0,60,0"
                                  Style="{StaticResource ModernTextBox}"
                                  GotFocus="userEntry_GotFocus" 
                                  KeyDown="OnKeyDownInUserEntryBoxHandler" 
@@ -298,13 +300,16 @@
                         <Button x:Name="userEntryApplyBtn"
                                 Grid.Row="5" 
                                 Width="50" 
-                                Margin="5"
+                                Height="30"
+                                Margin="5,5,5,5"
                                 Background="#FFD6D5D5"
                                 FontWeight="DemiBold"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource RoundedButton}"
-                                Content="Apply"
-                                Click="userEntryApplyBtn_Click" UseLayoutRounding="True" />
+                                Content="Apply"        
+                                IsEnabled="False"
+                                Click="userEntryApplyBtn_Click" 
+                                UseLayoutRounding="True" />
 
 
 
@@ -362,10 +367,10 @@
 
                         <Label Grid.Row="1"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
+                               VerticalAlignment="Center"
                                Content="[HOSTNAME]"
                                Foreground="#FF020E25"
-                               Margin="6,0,0,0"
+                               Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
                                />
@@ -378,8 +383,11 @@
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="15"
-                               Margin="20,12,0,0"
-                               />
+                               Margin="{StaticResource CurrentSettingsValuesMargins}"
+                            >
+                        </Label>
+
+
 
 
                         <Rectangle Grid.Row="2"
@@ -388,10 +396,10 @@
 
                         <Label Grid.Row="2"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
+                               VerticalAlignment="Center"
                                Content="[DOMAIN]"
                                Foreground="#FF020E25"
-                               Margin="6,0,0,0"
+                               Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
                                
@@ -405,7 +413,7 @@
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="15"
-                               Margin="20,12,0,0"
+                               Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
 
 
@@ -415,10 +423,10 @@
 
                         <Label Grid.Row="3"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
+                               VerticalAlignment="Center"
                                Content="[ADAPTER]"
                                Foreground="#FF020E25"
-                               Margin="6,0,0,0"
+                               Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
                                />
@@ -431,7 +439,7 @@
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="15"
-                               Margin="20,12,0,0"
+                               Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
 
 
@@ -441,10 +449,10 @@
 
                         <Label Grid.Row="4"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
+                               VerticalAlignment="Center"
                                Content="[IP ADDRESS]"
                                Foreground="#FF020E25"
-                               Margin="6,0,0,0"
+                               Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
                                
@@ -458,7 +466,7 @@
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="15"
-                               Margin="20,12,0,0"
+                               Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
 
                         <Rectangle Grid.Row="5"
@@ -467,10 +475,10 @@
 
                         <Label Grid.Row="5"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
+                               VerticalAlignment="Center"
                                Content="[SPEED]"
                                Foreground="#FF020E25"
-                               Margin="6,0,0,0"
+                               Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12" 
                                />
@@ -483,7 +491,7 @@
                                Foreground="{StaticResource CurrentSettingsTextColor}"
                                FontFamily="Trebuchet MS"
                                FontSize="15"
-                               Margin="20,12,0,0"
+                               Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
                     </Grid>
 

@@ -678,6 +678,7 @@ namespace WetWorks_NetWorks
             this.Dispatcher.Invoke(() => 
             {
                 userEntryTxt.Text = String.Empty;
+                userEntryApplyBtn.IsEnabled = false;
             });
 
         }
@@ -690,130 +691,7 @@ namespace WetWorks_NetWorks
                 {
                     e.Handled = true;
                     System.Windows.Forms.Application.Exit();
-                }
-                /*
-                if (e.Key == Key.Enter || e.Key == Key.Return )
-                {
-                    Console.WriteLine($"UserEntrTxt: {userEntryTxt.Text}");
-
-                    if (choiceSelect == 5)
-                    {
-
-                        //split character
-                        string sep = @" ";
-                        bool validIP;
-                        bool validMask;
-
-                        try
-                        {
-                            if (userEntryTxt.Text.Contains(" "))
-                            {
-                                //split user input string into ipa and ipm
-                                string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
-
-
-                                validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
-                                validMask = IPAddress.TryParse(customIP[1], out IPAddress mask);
-
-
-                                if (!validIP || !validMask)
-                                {
-                                    UpdateStatusLbl("Not a Valid IP Address! Try Again");
-                                }
-                                else
-                                {
-                                    Process p = new Process();
-                                    
-                                    ProcessStartInfo info = new ProcessStartInfo
-                                    {
-                                        FileName = "netsh.exe",
-                                        Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapterName, ip, mask),
-                                        CreateNoWindow = true,
-                                        UseShellExecute = true,
-                                        Verb = "runas",
-                                        RedirectStandardOutput = false,
-                                    };
-                                    p.StartInfo = info;
-                                    ProcessRequest(p);
-                                    UpdateAdapterInfo();
-                                }
-                            }
-                            else if (userEntryTxt.Text.Contains("/"))
-                            {
-                                sep = @"/";
-                                string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
-
-                                validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
-                                bool validMaskBits = int.TryParse(customIP[1], out int maskBits);
-
-                                if (validMaskBits)
-                                {
-                                    string mask = null;
-
-                                    switch (maskBits)
-                                    {
-                                        case 8:
-                                            mask = "255.0.0.0";
-                                            break;
-                                        case 16:
-                                            mask = "255.255.0.0";
-                                            break;
-                                        case 22:
-                                            mask = "255.255.252.0";
-                                            break;
-                                        case 23:
-                                            mask = "255.255.254.0";
-                                            break;
-                                        case 24:
-                                            mask = "255.255.255.0";
-                                            break;
-
-                                        default:
-                                            mask = null;
-                                            UpdateStatusLbl("Invalid Maskbits! This app only supports '/8', '/16', '/22', '/23', or '/24'");
-                                            break;
-                                    }
-
-                                    if (!string.IsNullOrEmpty(mask))
-                                    {
-                                        Process p = new Process();
-                                        
-                                        ProcessStartInfo info = new ProcessStartInfo
-                                        {
-                                            FileName = "netsh.exe",
-                                            Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapterName, ip, mask),
-                                            CreateNoWindow = true,
-                                            UseShellExecute = true,
-                                            Verb = "runas",
-                                            RedirectStandardOutput = false,
-                                        };
-
-                                        p.StartInfo = info;
-                                        ProcessRequest(p);
-                                        UpdateAdapterInfo();
-                                    }
-                                }
-                                else
-                                {
-                                    UpdateStatusLbl("Invalid Maskbits! This app only supports '/8', '/16', '/22', '/23', or '/24'");
-                                }
-                            }
-                            else
-                            {
-                                UpdateStatusLbl("Invalid Entry! Try Again. (OnKeyDown)");
-                            }
-                        }
-
-                        catch (IndexOutOfRangeException)
-                        {
-                            UpdateStatusLbl("You must enter an IPAddress followed by a single space, then a Subnet Mask");
-                        }
-                        catch (Exception)
-                        {
-                            UpdateStatusLbl("Invalid! Try Again");
-                        }
-                    }
-                }*/
+                }          
             }));
         }
 
@@ -943,6 +821,8 @@ namespace WetWorks_NetWorks
         private void OnUserEntryTextChanged(object sender, TextChangedEventArgs e)
         {
             // Handle text changed events
+            userEntryApplyBtn.IsEnabled = true;
+
             var textBox = sender as TextBox;
             if (textBox != null)
             {

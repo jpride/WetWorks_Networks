@@ -2,9 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WetWorks_NetWorks"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+
+        <Thickness x:Key="CurrentSettingsMargins">6,22,0,0</Thickness>
+        <Thickness x:Key="CurrentSettingsValuesMargins">20,12,0,0</Thickness>
+        
         <BitmapImage x:Key="EthernetIcon" UriSource="/ethernet icon.png" />
         <BitmapImage x:Key="WifiIcon" UriSource="/wifi icon.png" />
 
@@ -223,15 +228,29 @@
             <Setter Property="Template">
                 <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            CornerRadius="5">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="12">
 
-                            <TextBlock Text="{TemplateBinding Content}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"/>
+                            <TextBlock  x:Name="txtBlock" 
+                                        Text="{TemplateBinding Content}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="Black"/>
                         </Border>
-                </ControlTemplate>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                                <Setter TargetName="txtBlock" Property="Foreground" Value="Gray"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="GhostWhite"/>
+                                <Setter TargetName="txtBlock" Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
             </Setter.Value>
             </Setter>
         </Style>
