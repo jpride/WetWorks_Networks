@@ -188,7 +188,7 @@ namespace WetWorks_NetWorks
                 case 1:
                     this.Dispatcher.Invoke(() => 
                     {
-                        FadeInAndOut(choice1AccentBtn);
+                        //FadeInAndOut(choice1AccentBtn);
                         choice1AccentBtn.Visibility = Visibility.Visible;
                         choice1Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -198,7 +198,7 @@ namespace WetWorks_NetWorks
                 case 2:
                     this.Dispatcher.Invoke(() =>
                     {
-                        FadeInAndOut(choice2AccentBtn);
+                        //FadeInAndOut(choice2AccentBtn);
                         choice2AccentBtn.Visibility = Visibility.Visible;
                         choice2Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -207,7 +207,7 @@ namespace WetWorks_NetWorks
                 case 3:
                     this.Dispatcher.Invoke(() =>
                     {
-                        FadeInAndOut(choice3AccentBtn);
+                        //FadeInAndOut(choice3AccentBtn);
                         choice3AccentBtn.Visibility = Visibility.Visible;
                         choice3Btn.IsChecked = true;
                         ResetUserEntryText();
@@ -219,14 +219,14 @@ namespace WetWorks_NetWorks
                         
                         choice4AccentBtn.Visibility = Visibility.Visible;
                         choice4Btn.IsChecked = true;
-                        FadeInAndOut(choice4AccentBtn);
+                        //FadeInAndOut(choice4AccentBtn);
                         ResetUserEntryText();
                     });
                     break;
                 case 5:
                     this.Dispatcher.Invoke(() =>
                     {
-                        FadeInAndOut(choice5AccentBtn);
+                        //FadeInAndOut(choice5AccentBtn);
                         choice5AccentBtn.Visibility = Visibility.Visible;
                         choice5Btn.IsChecked = true;
                     });
@@ -426,6 +426,10 @@ namespace WetWorks_NetWorks
                             if (nic.Name.Contains("Ethernet"))
                             {
                                 SendAdapterUpdateToUI(nic, ipv4Props, true);
+                            }
+                            else
+                            {
+                                UpdateStatusLbl("No Ethernet Adapter Found. Adapter must contain 'Ethernet' in its name.");
                             }
                         }
                     }

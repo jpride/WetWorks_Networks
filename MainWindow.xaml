@@ -14,9 +14,7 @@
         KeyDown="OnKeyDownInMainWindowHandler" 
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-    <!--Styles located in App.Xaml -->
-
-          
+        <!--Styles located in App.Xaml -->
     </Window.Resources>
 
     <Grid>
@@ -42,7 +40,7 @@
                HorizontalAlignment="Center" 
                Height="290"  
                VerticalAlignment="Top"  
-               Source="/cthulhu_blur.png" 
+               Source="/Images/cthulhu_blur.png" 
                Width="294" 
                Margin="0,0,0,0" 
                Grid.RowSpan="2"
@@ -61,7 +59,7 @@
                 Style="{StaticResource LogoButtonTheme}"
                 >
             <Button.Background>
-                <ImageBrush ImageSource="/Wetwork Icon.png" Stretch="Uniform" AlignmentX="Left" AlignmentY="Top"   />
+                <ImageBrush ImageSource="/Images/Wetwork Icon.png" Stretch="Uniform" AlignmentX="Left" AlignmentY="Top"   />
             </Button.Background>
         </Button>
 
@@ -98,7 +96,8 @@
                 HorizontalAlignment="Center"
                 Content="SELECT AN INTERFACE"
                 FontSize="20"
-                Foreground="Black"/>
+                Foreground="Black"
+                FontFamily="/Fonts/#Jura"/>
 
         <Border Width="700"                      
                 Grid.Row="1"
@@ -122,13 +121,12 @@
                     BorderBrush="Azure"
                     BorderThickness="0,0,0,1"
                     FontSize="18"
-                    Foreground="White"
                     FontWeight="Bold"
                     Content="ETHERNET"
                     Tag="{StaticResource EthernetIcon}"
                     Style="{StaticResource ImageTextRadioButtonStyle}" 
-                    Click="EthernetBtn_Click">
-
+                    Click="EthernetBtn_Click"
+                    FocusVisualStyle="{x:Null}">
             </RadioButton>
 
             <RadioButton 
@@ -137,12 +135,12 @@
                     BorderBrush="Azure"
                     BorderThickness="0,0,0,1"
                     FontSize="18"
-                    Foreground="White"
                     FontWeight="Bold"
                     Content="WIFI"
                     Tag="{StaticResource WifiIcon}"
                     Style="{StaticResource ImageTextRadioButtonStyle}" 
-                    Click="WifiBtn_Click" >
+                    Click="WifiBtn_Click"
+                    FocusVisualStyle="{x:Null}">
 
             </RadioButton>
 
@@ -199,10 +197,11 @@
                                 Content="SELECT AN IP SCHEME"
                                 FontWeight="Bold"
                                 FontSize="16"
+                                FontFamily="/Fonts/#Jura"
                                 HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="#FFD6D5D5"
+                                Background="#FFEEEEEE"
                                 BorderBrush="#FF6C6B6B"
                                 BorderThickness="1"
                                 Width="300"
@@ -352,10 +351,11 @@
                                 Content="CURRENT SETTINGS"
                                 FontWeight="Bold"
                                 FontSize="16"
+                                FontFamily="/Fonts/#Jura"
                                 HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
-                                Background="#FFD6D5D5"
+                                Background="#FFEEEEEE"
                                 BorderBrush="#FF6C6B6B"
                                 BorderThickness="1"
                                 Width="300"
@@ -370,6 +370,7 @@
                                VerticalAlignment="Center"
                                Content="[HOSTNAME]"
                                Foreground="#FF020E25"
+                               FontFamily="{StaticResource JuraFont}"
                                Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
@@ -378,11 +379,11 @@
                         <Label x:Name="hostnameTxt"
                                Grid.Row="1"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="top"
                                Content="TSIL-JEFFPRIDE"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
-                               FontFamily="Trebuchet MS"
                                FontSize="15"
+                               FontFamily="{StaticResource MontserratFont}"
                                Margin="{StaticResource CurrentSettingsValuesMargins}"
                             >
                         </Label>
@@ -402,16 +403,17 @@
                                Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
+                               FontFamily="{StaticResource JuraFont}"
                                
                                />
 
                         <Label x:Name="domainTxt"
                                Grid.Row="2"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Content="tsi-inc.local"
+                               VerticalAlignment="Top"
+                               Content="super.long.domain.name.with.extra"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
-                               FontFamily="Trebuchet MS"
+                               FontFamily="{StaticResource MontserratFont}"
                                FontSize="15"
                                Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
@@ -429,15 +431,16 @@
                                Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
+                               FontFamily="{StaticResource JuraFont}"
                                />
 
                         <Label x:Name="adapterTxt"
                                Grid.Row="3"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Top"
                                Content="ETHERNET"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
-                               FontFamily="Trebuchet MS"
+                               FontFamily="{StaticResource MontserratFont}"
                                FontSize="15"
                                Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
@@ -455,16 +458,17 @@
                                Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12"
+                               FontFamily="{StaticResource JuraFont}"
                                
                                />
 
                         <Label x:Name="ipaTxt"
                                Grid.Row="4"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Top"
                                Content="192.168.86.52 / 16"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
-                               FontFamily="Trebuchet MS"
+                               FontFamily="{StaticResource MontserratFont}"
                                FontSize="15"
                                Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
@@ -481,15 +485,16 @@
                                Margin="{StaticResource CurrentSettingsMargins}"
                                Padding="0,0,0,1"
                                FontSize="12" 
+                               FontFamily="{StaticResource JuraFont}"
                                />
 
                         <Label x:Name="speedTxt"
                                Grid.Row="5"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Top"
                                Content="600 Mbps"
                                Foreground="{StaticResource CurrentSettingsTextColor}"
-                               FontFamily="Trebuchet MS"
+                               FontFamily="{StaticResource MontserratFont}"
                                FontSize="15"
                                Margin="{StaticResource CurrentSettingsValuesMargins}"
                                />
@@ -521,7 +526,7 @@
                    FontSize="13"
                    Margin="10,0,0,0"
                    FontStyle="Italic"
-                   Content="This is a long sentence to test this label" />
+                   Content="This is a long sentence to test this label. It can be a really really really long status" />
 
         </StackPanel>
 

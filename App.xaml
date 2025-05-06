@@ -8,10 +8,10 @@
 
 
         <Thickness x:Key="CurrentSettingsMargins">6,22,0,0</Thickness>
-        <Thickness x:Key="CurrentSettingsValuesMargins">20,12,0,0</Thickness>
+        <Thickness x:Key="CurrentSettingsValuesMargins">20,5,0,0</Thickness>
         
-        <BitmapImage x:Key="EthernetIcon" UriSource="/ethernet icon.png" />
-        <BitmapImage x:Key="WifiIcon" UriSource="/wifi icon.png" />
+        <BitmapImage x:Key="EthernetIcon" UriSource="/Images/ethernet icon.png" />
+        <BitmapImage x:Key="WifiIcon" UriSource="/Images/wifi icon.png" />
 
         <SolidColorBrush x:Key="ActiveButtonColor" Color="#FF1D65D7" />
         <SolidColorBrush x:Key="HoverButtonColor" Color="#A02C70CC" />
@@ -27,7 +27,10 @@
         <SolidColorBrush x:Key="SchemeTextColor" Color="#000" />
 
         <SolidColorBrush x:Key="RectangleBackColor" Color="#222" />
-        
+
+        <FontFamily x:Key="JuraFont">/Fonts/#Jura</FontFamily>
+        <FontFamily x:Key="MontserratFont">/Fonts/#Montserrat</FontFamily>
+
         <Style TargetType="Button"
            x:Key="LogoButtonTheme">
             <Setter Property="Template">
@@ -61,25 +64,32 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Padding="{TemplateBinding Padding}">
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center">
-                                <Image x:Name="ButtonImage"
-                                       Height="26"
-                                       Source="{TemplateBinding Tag}"
-                                       Margin="0,0,10,0" />
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                  TextBlock.Foreground="GhostWhite"/>
+                            
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FocusVisualStyle="{x:Null}">
+                                
+                            <Image x:Name="ButtonImage"
+                                    Height="26"
+                                    Source="{TemplateBinding Tag}"
+                                    Margin="0,0,10,0" />
+
+                                <TextBlock x:Name="ButtonText"
+                                            Text="{TemplateBinding Content}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Foreground="GhostWhite"
+                                            FontWeight="Bold"
+                                            FontSize="18"
+                                            FontFamily="/Fonts/#Montserrat" />
 
                             </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter Property="Background" Value="{StaticResource ActiveButtonColor}" />
-                                <Setter Property="Foreground" Value="Black" />
-                                <Setter Property="FontWeight" Value="Bold" />
-                                <Setter Property="FontSize" Value="20"/>
+
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="{StaticResource HoverButtonColor}" />
@@ -125,7 +135,8 @@
                                 <Grid   x:Name="grid"                                    
                                     VerticalAlignment="Stretch"
                                     HorizontalAlignment="Stretch"
-                                    Background="{TemplateBinding Background}">
+                                    Background="{TemplateBinding Background}"
+                                    FocusVisualStyle="{x:Null}">
 
                                     <TextBlock  x:Name="TxtBlock"
                                         Text="{TemplateBinding Property=Content}"
@@ -133,7 +144,8 @@
                                         HorizontalAlignment="Center"
                                         Foreground="{StaticResource SchemeTextColor}"
                                         FontWeight="Bold"
-                                        FontSize="14"/>
+                                        FontSize="15"
+                                        FontFamily="/Fonts/#Jura"/>
                                 </Grid>
                             </Border>
 
@@ -189,7 +201,8 @@
                                        HorizontalAlignment="Center"
                                        Padding="5"
                                        Foreground="{StaticResource SchemeTextColor}"
-                                       FontSize="13"
+                                       FontSize="16"
+                                       FontFamily="/Fonts/#Jura"
                                        x:Name="userEntryTextBox"/>
 
                                 <TextBlock IsHitTestVisible="False"
@@ -198,6 +211,7 @@
                                        HorizontalAlignment="Center"
                                        Margin="10,0,0,0"
                                        FontSize="13"
+                                       FontFamily="/Fonts/#Jura"
                                        Foreground="#444"
                                        Grid.Column="1">
 
@@ -242,11 +256,13 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
                                 <Setter TargetName="txtBlock" Property="Foreground" Value="Gray"/>
                             </Trigger>
 
                             <Trigger Property="IsEnabled" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="GhostWhite"/>
+                                <Setter TargetName="border" Property="Opacity" Value="1.0"/>
                                 <Setter TargetName="txtBlock" Property="Foreground" Value="Black"/>
                             </Trigger>
                         </ControlTemplate.Triggers>

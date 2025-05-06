@@ -55,7 +55,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon_cthulhu.ico</ApplicationIcon>
+    <ApplicationIcon>Images\favicon_cthulhu.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -122,6 +122,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\Jura-Bold.ttf" />
+    <Resource Include="Fonts\Montserrat-Bold.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -132,16 +134,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="cthulhu_blur.png" />
+    <Resource Include="Images\cthulhu_blur.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Stack Panel BG.png" />
+    <Resource Include="Images\Stack Panel BG.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Wetwork Icon.png" />
+    <Resource Include="Images\Wetwork Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="favicon_cthulhu.ico" />
+    <Resource Include="Images\favicon_cthulhu.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -156,10 +158,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ethernet icon.png" />
+    <Resource Include="Images\ethernet icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="wifi icon.png" />
+    <Resource Include="Images\wifi icon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
