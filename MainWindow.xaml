@@ -8,14 +8,19 @@
         mc:Ignorable="d"
         Title="Wetwork IP" 
         Height="460" 
-        Width="700"
-        Background="#DDD" 
+        Width="700" 
         ResizeMode="NoResize" 
         KeyDown="OnKeyDownInMainWindowHandler" 
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <!--Styles located in App.Xaml -->
     </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDDDDDD" Offset="0.15"/>
+            <GradientStop Color="#3FDDDDDD" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -340,11 +345,11 @@
                             <RowDefinition Height="43"/>
                             <RowDefinition Height="43"/>
                         </Grid.RowDefinitions>
-                        
+
                         <Border Grid.RowSpan="6"
                                 BorderBrush="#FF7E7E7E"
                                 BorderThickness="1,1,1,1"
-                                CornerRadius="0"/> 
+                                CornerRadius="0"/>
 
                         <Label  Grid.Row="0"
                                 Margin="0"
@@ -513,14 +518,14 @@
                     Orientation="Horizontal"
                     Background="#444655">
 
-            <Label x:Name="statusLbl"
+            <Label Name="statusLbl"
                    HorizontalAlignment="Left"
                    Margin="5,0,0,0"
                    Content="STATUS"
                    FontSize="16"
                    Foreground="GhostWhite"/>
 
-            <Label x:Name="statusTxt"
+            <Label Name="statusTxt"
                    HorizontalAlignment="Center"
                    Foreground="GhostWhite"
                    FontSize="13"

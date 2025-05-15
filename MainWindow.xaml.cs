@@ -389,6 +389,7 @@ namespace WetWorks_NetWorks
             }
             catch (Exception ex)
             {
+                Logger.LogError("Error in ProcessRequest", ex);
                 UpdateStatusLbl(String.Format($"Error Processing Request:{ex.Message}\n"));
             }
         }
@@ -438,6 +439,7 @@ namespace WetWorks_NetWorks
 
             catch (Exception ex)
             {
+                Logger.LogError("Error in GetAdapterInfoAtStartup", ex);
                 Console.WriteLine(ex.ToString());
                 UpdateStatusLbl("Error in UpdateAdapterInfo");
             }
@@ -495,6 +497,7 @@ namespace WetWorks_NetWorks
 
             catch (Exception ex)
             {
+                Logger.LogError("Error in UpdateAdapterInfo", ex);
                 Console.WriteLine(ex.ToString());
                 UpdateStatusLbl("Error in UpdateAdapterInfo");
             }
@@ -520,7 +523,8 @@ namespace WetWorks_NetWorks
                 this.Dispatcher.Invoke(() => 
                 {
                     adapterTxt.Content = String.Format($"{_adapterName}");
-                    hostnameTxt.Content = Dns.GetHostName();             
+                    hostnameTxt.Content = Dns.GetHostName();     
+                    domainTxt.Content = GetDomainName();
                     SetIpaText(String.Format($"{ip.Address} / {ip.PrefixLength}"));
                 });
       
@@ -563,8 +567,9 @@ namespace WetWorks_NetWorks
 
                 return p;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogError($"Error in CreateProcess: {ex}");
                 UpdateStatusLbl("Error Creating Process");
             }
 
@@ -575,9 +580,10 @@ namespace WetWorks_NetWorks
         {
             try
             {
-                Domain domain = Domain.GetCurrentDomain();
-                if (debug) { Console.WriteLine($"Domain Name : {domain}"); }
-                return domain.Name;
+                //Domain domain = Domain.GetCurrentDomain();
+                string domainName = Environment.UserDomainName;
+                if (debug) { Console.WriteLine($"Domain Name : {domainName}"); }
+                return domainName;
             }
             catch (Exception)
             {
@@ -603,9 +609,8 @@ namespace WetWorks_NetWorks
                 IPInterfaceProperties prop = _nic.GetIPProperties();
 
                 //domain name display 
-                //string domainName = GetDomainName();
-                string connectionSpecificDNSSuffix = prop.DnsSuffix;
-                string domainNameForUI = string.IsNullOrEmpty(connectionSpecificDNSSuffix) ? "none defined" : connectionSpecificDNSSuffix;
+                string domainName = GetDomainName();
+                //string domainNameForUI = string.IsNullOrEmpty(Environment.UserDomainName) ? "none defined" : Environment.UserDomainName;
 
                 //speed display
                 _speed = SpeedCalc(nic);
@@ -615,7 +620,7 @@ namespace WetWorks_NetWorks
                 this.Dispatcher.Invoke(() =>
                 {
                     adapterTxt.Content = String.Format($"{_adapterName}");
-                    domainTxt.Content = domainNameForUI;
+                    domainTxt.Content = domainName;
                     UpdateStatusLbl(String.Empty);
                 });
 
@@ -649,20 +654,21 @@ namespace WetWorks_NetWorks
         #region ******** UI Processing ********
         private void UpdateStatusLbl(string msg)
         {
+            
             if (!msg.Equals(String.Empty))
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    statusLbl.Visibility = Visibility.Visible;
+                    SetVisibilityForLabel(statusLbl, true);
                     statusTxt.Content = String.Format($"{msg}");
-                    //ipaTxt.Content = statusTxt.Content;
+
                 });
             }
             else
             {
                 this.Dispatcher.Invoke(() => 
                 {
-                    statusLbl.Visibility = Visibility.Hidden;
+                    SetVisibilityForLabel(statusLbl, false);
                     statusTxt.Content = String.Empty;
                 });
             }
@@ -894,6 +900,23 @@ namespace WetWorks_NetWorks
 
         }
 
+        public void SetVisibilityForLabel(Label label, bool isVisible)
+        {
+            if (isVisible)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    label.Visibility = Visibility.Visible;
+                });
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    label.Visibility = Visibility.Hidden;
+                });
+            }
+        }
         private void FadeInAndOut(DependencyObject d)
         {
             DoubleAnimation fadeInAnimation = new DoubleAnimation
